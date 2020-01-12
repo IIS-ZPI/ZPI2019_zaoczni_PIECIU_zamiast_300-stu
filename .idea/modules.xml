@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NBP_Currency.iml" filepath="$PROJECT_DIR$/NBP_Currency.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ZPI-NBP_Currency.iml" filepath="$PROJECT_DIR$/ZPI-NBP_Currency.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/ZPI-app.iml" filepath="$PROJECT_DIR$/app/ZPI-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ZPI2019_zaoczni_PIECIU_zamiast_300-stu-NBP_Currency.iml" filepath="$PROJECT_DIR$/ZPI2019_zaoczni_PIECIU_zamiast_300-stu-NBP_Currency.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/ZPI2019_zaoczni_PIECIU_zamiast_300-stu-app.iml" filepath="$PROJECT_DIR$/app/ZPI2019_zaoczni_PIECIU_zamiast_300-stu-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
