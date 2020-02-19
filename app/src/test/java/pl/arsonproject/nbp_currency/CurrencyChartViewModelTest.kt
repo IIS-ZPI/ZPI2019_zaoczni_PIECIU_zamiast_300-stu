@@ -24,7 +24,7 @@ class CurrencyChartViewModelTest: CurrencyChartViewModel() {
      * You can set variables date and currency and compare result from api vs results from application
      *
      * We' ve got 2 assertions for test call. First return false test if response is null, however second return true
-     * if your response isSuccessful. It's boolean method which return code >= 200 && code < 300.
+     * if your response isSuccessful. It's boolean method which return code >= 200 && code < 300...
      */
     @Test
     fun testApi() {

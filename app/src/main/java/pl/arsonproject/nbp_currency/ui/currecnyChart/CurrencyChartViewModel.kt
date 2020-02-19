@@ -85,7 +85,7 @@ open class CurrencyChartViewModel : ViewModel() {
                     publicationDateSecond.set(response.body()?.rates?.get(0)?.effectiveDate!!)
                 }
             } catch (e: Exception) {
-                errorMessage.value = e.message
+                errorMessage.value = e.message //
             }
         }
     }
