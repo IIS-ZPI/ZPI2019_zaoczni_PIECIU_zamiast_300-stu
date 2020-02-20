@@ -19,7 +19,6 @@ deploy:
   provider: releases
   token:
     secure: vdEZjvanVyrCQjYDq/bfdzOBLqdqVbsZPsnSBXDzLI6XjEReYeFeT+0DjYQPwR4QWsgkQBIxm9LEwQmteWtS2EkcmuZ7ymlqXGeHmCuz+KLKqTQ+5G5S7SLroNCc8UG1Hs0hw113894vgacS0siL8PKkzmt4bIRN7/eE8tGVrlPu07CCVwJtnVRpnR6iXz1yIy4ZPclraI1SksS0J8Sb1JGWqpoD675a1+/NUk8SZHUOxPgfveULU3tGsI7s1fbH3b4R2rvzIch/Ydvm13adAnU1LVnBJRzZnF38kFltzRyWFGXk1B651k/XBHBaLLujhMmX3BOhwaiw9yzPNw32sXd7adTlXRiQYueDt0JOkWWPHSeriYMDgXDjAHl+v74FatU+D4x+N6mkMmFLGU+++ynoxEuKuQT1RiS7jt7J5STfCL2EcVFjmq/9u3Rzr1KRjIBfU8PMa3pQwifSialgkcUvrh2+HY0HAPmipQn1OhtyqIGfV30oc7zZMBIsmyzX6g21KRLDgN/3bCSNAyMsKae0RLR4HaJOsdEs8PFQDCZRfKdV7CTYtdgQkYhFDkifWe+HShqfXvUS+dPdcdZJAhXqsJ2zqWoGtqjbec2Vp82kUBCk6f806eOO0bZ0ENjU3QqokKIJitGc/uoqv3X3sMFQjXJVjGhmeCo/YE/8V0c=
-  script: 
   file_glob: true
   file: "./*.apk"
   skip_cleanup: true
