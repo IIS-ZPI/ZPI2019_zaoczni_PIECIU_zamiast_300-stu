@@ -6,6 +6,9 @@ android:
   - build-tools-29.0.2
   - android-29
   - extra
+branches:
+  only:
+    develop
 before_deploy:
 - git config --global user.email "builds@travis-ci.com"
 - git config --global user.name "Travis CI"
