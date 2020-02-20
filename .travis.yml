@@ -6,26 +6,30 @@ before_deploy:
 - git config --global user.name "Travis CI"
 - export GIT_TAG=1.3.$TRAVIS_BUILD_NUMBER
 - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-- git tag
-- env
-- git push -q https://${TAGPERM}@github.com/IIS-ZPI/ZPI2019_zaoczni_PIECIU_zamiast_300-stu
-  --tags
 deploy:
   provider: releases
-  user: jnehlt
-  password:
-    secure: RleNFTgsBpmt5GrcqW3PtfAoEhqvjIdlxz1QaiH7F/+IcN4MDC8jYUfaL5FSMkc0I7GKysV0H4ja217CPElqAaKuQfTocWMCdYkUh4nbwL+TbKeVYBmFKkyVMKYcDaTf0OoW0C1EGUWQqphdj8TtUScFwq1N3mVPxAQOi45uF5H6rvnKmsawOat/4XvUvalfB+Q/H9UWemvyApfPfJyw8wddkE5VATW3Qku8/yoi5aQVnYnqouMnB2TVwIQBufU28YQQ703FVDEkkR9Vp4RNby6uUb8p8o5UJfZt/wdpx5ovunCiW4UQBjoy6QjS/6X4wV5qPuH+LZy4Ox3N3jZyUCfkq8UOk26DFMaK4SIhi5Rfqc+GOyXzJYEwNiXhyteCTYdla90kAGbc5xBRr/GVGnHqeOcsUeJbwa/b7pvUxWCUh4Sb7d1Kcdf022lwwppILe0r2RyXD55AnbmnQNU8Nv0fN/ImErjGZPEev+/dRFv2FQc2vMyheGWoSv4y+azN6dIRmwb2VUGcT8t+uG7hjRVkPEznXVc+CjFrPIoedguLwB0EXjK0cB4TwULaklwo7zX5EQNxPzVn8A7yUdrfhSLpl9EuWiSKADcjoUhVeYDaaMTGHM7vOAYspdjHTJaAgF6IqT3YakqquW5A6XOmaLduUbg+nnEM6apwIDpWXms=
+  api_key:
+    secure: YNCqhXBk6+yCfqX4LoWUOXAoEIiLq+XDVoNOIEVT5UkPTfStD6QHxYhaDghX4ZC4DMpf/npDdFU4SAGacPvn92mPpZ0jk+/nlgIAj6LohimISbXo99vaiNoFQ9Ydw0e2Nq9kRzsqacAkX6ZleLP6pKW7rkXIzK3b23LsZ0WbJzek4X3CwbJrJ1vLNMeRgI0+zSIRiBhvdx5t61gzWiNeW8ylDlSMmbM6nMm3WOs6vfcNG2tJpQG/gafh5YsEhcQH+jlT8+Ki/FBtR2yar1RWwWTTBNuyf/uw+35B90bWV5pcligeMWppjTYVMPeNDuMVZcFMroUyWfukxzXxqNjSYBm85JyfJboXVSDhg2o/54zz71ZHpGhuwjVwrnIbwB3BTcDpsIKwP16fMpn6ZTp71QgKGhtmRZhW8RdhjeBzmBh7082YWmzOh/h+m21B7RxyeUddZSA0/z+b4/iTiDxMADjbD9l3HOqe5bE5b57XR/wr9WBXHZfejUMYVsHc7Ii0ogQp1nZ8TmzfD0/dWvsIz9/XIFJLjpyPuo97BCKIgoOnoWXgqMXbc3wiF1ijdOFIdQNE6R+tiq7RLp5LLQqoRl3leM4y2V4+ssZ2PXsCw5j4Y00y1X0G/dHM6IjWcKe0Efw462av8Gdu8/8p1hqITbJ+FxLg2APhXh58d/zeSuU=
+  file_glob: true
   file: "./*.apk"
   skip_cleanup: true
   on:
-    branch: CI_CD_improvements
+    branch:
+    - CI_CD_improvements
+    - develop
 matrix:
   fast_finish: true
   include:
-  - name: DUMMY apk
+  - name: Compile Release Sources
+    script: "./gradlew compileReleaseSources"
+  - name: Compile Release Unit Test Sources
+    script: "./gradlew compileReleaseUnitTestSources"
+  - name: Local Unit Test
+    script: "./gradlew test --continue"
+  - name: Build a DebugAPK
     script:
-    - touch ./test.apk
-    - "./prepare_apk_name.sh"
+    - "./gradlew assembleDebug"
+    - ./prepare_apk_name.sh
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -35,6 +39,3 @@ cache:
   - "$HOME/.m2"
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-env:
-  global:
-  - secure: SYV+YPWakMuAPtQejqGZLk6x1j5x5LJ3/bq4M7eK/e+FtXBzhiayWIVAE1nBn9WcJbKDzEOY07uKLTPpRwUbIIYp0Ro2dEENLsL/gfbSQazyhI2f7Wz27FKJpCMWXLTdwxtcB1cxJKnzejAdwDbPUIWPsbf8HKTLwo/xSdEsw2xA3u3IEU1n3cUeWQ744xxSi62hwBsZxnbICIk6nyX+IO6O/xwb38deAh9BEyFmuhq7GwgWS4tv56+jJDuiuHkOsFn3sfWHzPoQKCvkO+c1UHLbiEZTHwEtn7S4dSUtKbm8nrx/v3y0jf9A+k98kcSv9WIa/TrMCWdO+j0/SUVWdrebCW50JIlQtypCuE7IksieRwv6yI+VgoHviIocVvES2u3GJXTgc/i7brHyb2JH6i//eizJDepuTD9BvshV0QUhDotsE1cuYS+k+shXWMGHrQ4nRulEpPK3q9rQdZBTHRytJExWYSw3v8llBQXgusFNnEiYKW4OTWbKE8Ef+shENwIMjVGmG/SJxbtzcOW5hBA6ACE0fOwrg8fUJ++r0HtCZoc1CYmozyTuxu4kvj1UWHGDBHsEgoQYlxvG1uihAym1XD3GttI+fm63OEen42j1zJenFzlL9khCroM9MQMLtI4rc3ZkQuPCwu/MF42LhF+n4EMEU8vl/DSLZV6nv+Q=
