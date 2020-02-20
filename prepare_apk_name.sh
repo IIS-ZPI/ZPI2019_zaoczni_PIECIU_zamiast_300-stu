@@ -20,4 +20,4 @@ APK_FILENAME="${APK_NAME%.*}"
 GIT_LATEST_TAG=$(git describe --abbrev=0 --tags)
 GIT_NEWEST_TAG=$(echo ${GIT_LATEST_TAG} | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}')
 
-cp ${PATH_TO_APK} ./"${APK_FILENAME}-1.4${TRAVIS_BUILD_NUMBER}.${APK_EXT}"
+cp ${PATH_TO_APK} ./"${APK_FILENAME}-1.4.${TRAVIS_BUILD_NUMBER}.${APK_EXT}"
