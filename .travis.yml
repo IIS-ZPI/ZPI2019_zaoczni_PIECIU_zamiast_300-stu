@@ -20,7 +20,6 @@ deploy:
   skip_cleanup: true
   on:
     branch:
-    - CI_CD_improvements
     - develop
 matrix:
   fast_finish: true
