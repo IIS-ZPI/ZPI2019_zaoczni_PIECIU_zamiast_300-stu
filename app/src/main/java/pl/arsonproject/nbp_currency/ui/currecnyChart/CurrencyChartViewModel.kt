@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import pl.arsonproject.nbp_currency.repository.ApiFactory
 
-class CurrencyChartViewModel : ViewModel() {
+open class CurrencyChartViewModel : ViewModel() {
 
     val nameFirst = ObservableField<String>()
     val currencyPriceFirst = ObservableDouble()
