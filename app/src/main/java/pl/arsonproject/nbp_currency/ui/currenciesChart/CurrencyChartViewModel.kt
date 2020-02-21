@@ -14,35 +14,36 @@ import androidx.lifecycle.viewModelScope
 import com.anychart.AnyChart
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.charts.Cartesian
-import com.anychart.charts.Cartesian3d
-import com.anychart.core.cartesian.series.Area3d
 import com.anychart.data.Set
-import com.anychart.enums.MarkerType
 import com.anychart.enums.TooltipPositionMode
 import com.anychart.graphics.vector.Stroke
 import kotlinx.coroutines.launch
 import pl.arsonproject.nbp_currency.repository.ApiFactory
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 
 class CurrencyChartViewModel(application: Application) : AndroidViewModel(application) {
 
-    val entryList = ObservableField<List<CustomDataEntry>>()
-    val firstName = ObservableField<String>()
-    val secondName = ObservableField<String>()
-    val dateFrom = ObservableField<String>()
-    val dateTo = ObservableField<String>()
+    var entryList = arrayListOf<CustomDataEntry>()
+
+    var firstName = ""
+    var secondName = ""
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val dateFrom =
+        ObservableField<String>(LocalDate.now(ZoneId.systemDefault()).minusDays(7).toString())
+    @RequiresApi(Build.VERSION_CODES.O)
+    val dateTo = ObservableField<String>(LocalDate.now(ZoneId.systemDefault()).toString())
+
     val currencyList = ObservableField<List<String>>()
     val errorMessage = MutableLiveData<String>()
-    val chart = MutableLiveData<Cartesian3d>()
+    val chart = MutableLiveData<Cartesian>()
 
     init {
-        if (entryList.get() == null) {
+        if (entryList.count() == 0) {
             // todo : #1 Stworzyc nowa warstwe aplikacji - REPOSITORY
             viewModelScope.launch {
                 try {
@@ -63,10 +64,9 @@ class CurrencyChartViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun setChart(): Cartesian3d {
-        chart.value = AnyChart.area3d()
+    fun setChart(): Cartesian {
+        chart.value = AnyChart.cartesian()
         chart.value!!.animation(true)
-        chart.value!!.padding(10.0, 20.0, 5.0, 20.0)
 
         chart.value!!.crosshair().enabled(true)
         chart.value!!.crosshair()
@@ -79,6 +79,7 @@ class CurrencyChartViewModel(application: Application) : AndroidViewModel(applic
 
         chart.value!!.yAxis(0)
             .title("Cena")
+
         chart.value!!.xAxis(0)
             .labels()
             .padding(5.0, 5.0, 5.0, 5.0)
@@ -88,9 +89,9 @@ class CurrencyChartViewModel(application: Application) : AndroidViewModel(applic
         return chart.value!!
     }
 
-    fun setChartDate(currencyName: String) {
-        if (entryList.get() == null)
-            entryList.set(arrayListOf<CustomDataEntry>())
+    fun setChartDate(currencyName: String,currencyNameSecond : String) {
+        if (entryList == null)
+            entryList = arrayListOf<CustomDataEntry>()
 
         //todo: #1
         viewModelScope.launch {
@@ -103,33 +104,37 @@ class CurrencyChartViewModel(application: Application) : AndroidViewModel(applic
                     dateTo.get()!!.toString().format("YYYY-MM-dd")
                 ).await()
 
-                response.body()?.rates?.forEach {
-                    (entryList.get() as ArrayList<CustomDataEntry>).add(
+                var responseSecond = api.getCurrencyStatByDateAsync(
+                    "a",
+                    currencyNameSecond,
+                    dateFrom.get()!!.toString().format("YYYY-MM-dd"),
+                    dateTo.get()!!.toString().format("YYYY-MM-dd")
+                ).await()
+
+                response.body()?.rates?.forEachIndexed{ index , it ->
+                    entryList.add(
                         CustomDataEntry(
-                            "2020",
-                            it.midPrice
+                            it.effectiveDate,
+                            it.midPrice,
+                            responseSecond.body()?.rates?.get(index)?.midPrice ?: 0
                         )
                     )
                 }
+                var cartesian = chart.value!!
 
-//                var cartesian = chart.value!!
-//                cartesian.data(entryList.get())
-//
-//
-////                var set = Set.instantiate()
-////                set.data(entryList.get())
-////                var mapping1 = set.mapAs("{x : 'x', value : 'value'}")
-////                var mapping2 = set.mapAs("{x : 'x', value : 'value2'}")
-//
-////                var line1 = cartesian.line(mapping1)
-////                line1.color("RED")
-////
-////                var line2 = cartesian.line(mapping2)
-////                line2.color("GREEN")
-//
-//
-//                chart.value = cartesian
-//                chart.postValue(cartesian)
+                var set = Set.instantiate()
+                set.data(entryList.toList())
+
+                var mapping1 = set.mapAs("{x : 'x', value : 'value'}")
+                var mapping2 = set.mapAs("{x : 'x', value : 'value2'}")
+
+                var line1 = cartesian.line(mapping1)
+                line1.color("RED")
+                line1.name(currencyName)
+
+                var line2 = cartesian.line(mapping2)
+                line2.color("GREEN")
+                line2.name(currencyNameSecond)
 
             } catch (e: Exception) {
 
@@ -158,11 +163,7 @@ class CurrencyChartViewModel(application: Application) : AndroidViewModel(applic
 
         picker.datePicker.maxDate = calendar.timeInMillis
         calendar.add(Calendar.YEAR, -1)
-        picker.datePicker.minDate =
-            if (dateFrom.get().isNullOrBlank())
-                calendar.timeInMillis
-            else
-                SimpleDateFormat("YYYY-MM-dd").parse(dateFrom.get()).time
+        picker.datePicker.minDate = calendar.time.time
 
         picker.show()
     }
@@ -185,12 +186,7 @@ class CurrencyChartViewModel(application: Application) : AndroidViewModel(applic
             }, year, month, day
         )
 
-        picker.datePicker.maxDate =
-            if (dateTo.get().isNullOrEmpty())
-                calendar.time.time
-            else
-                LocalDateTime.parse(dateTo.get(), DateTimeFormatter.ISO_DATE)
-                    .toEpochSecond(ZoneOffset.UTC)
+        picker.datePicker.maxDate = calendar.time.time
         calendar.add(Calendar.YEAR, -1)
         picker.datePicker.minDate = calendar.time.time
         picker.show()
@@ -202,7 +198,8 @@ class CurrencyChartViewModel(application: Application) : AndroidViewModel(applic
         pos: Int,
         id: Long
     ) {
-        setChartDate(parent?.selectedItem.toString())
+        secondName = parent?.selectedItem.toString()
+        setChartDate(firstName,secondName)
     }
 
     fun onSelectItemFirst(
@@ -211,16 +208,13 @@ class CurrencyChartViewModel(application: Application) : AndroidViewModel(applic
         pos: Int,
         id: Long
     ) {
-        setChartDate(parent?.selectedItem.toString())
+        firstName = parent?.selectedItem.toString()
+        setChartDate(firstName,secondName)
     }
-}
 
-class CustomDataEntry internal constructor(
-    x: String?,
-    value: Number?
-
-) :
-    ValueDataEntry(x, value) {
-    init {
+    class CustomDataEntry : ValueDataEntry {
+        constructor(x: String, value: Number, value2: Number) : super(x, value) {
+            setValue("value2", value2)
+        }
     }
 }
