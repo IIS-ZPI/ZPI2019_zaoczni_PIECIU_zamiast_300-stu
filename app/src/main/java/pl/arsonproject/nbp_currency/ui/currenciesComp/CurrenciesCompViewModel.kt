@@ -1,4 +1,4 @@
-package pl.arsonproject.nbp_currency.ui.currecnyChart
+package pl.arsonproject.nbp_currency.ui.currenciesComp
 
 import android.view.View
 import android.widget.AdapterView
@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import pl.arsonproject.nbp_currency.repository.ApiFactory
 
-class CurrencyChartViewModel : ViewModel() {
+class CurrenciesCompViewModel : ViewModel() {
 
     val nameFirst = ObservableField<String>()
     val currencyPriceFirst = ObservableDouble()
