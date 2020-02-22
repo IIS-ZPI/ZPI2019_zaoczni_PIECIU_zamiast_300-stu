@@ -39,6 +39,7 @@ jobs:
     script:
     - "./gradlew assembleDebug"
     - "./prepare_apk_name.sh"
+    - "sleep 20"
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
