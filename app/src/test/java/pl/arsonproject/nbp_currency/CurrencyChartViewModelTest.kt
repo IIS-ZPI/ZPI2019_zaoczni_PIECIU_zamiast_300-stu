@@ -11,7 +11,7 @@ import pl.arsonproject.nbp_currency.ui.currenciesComp.CurrenciesCompViewModel
 
 class CurrencyChartViewModelTest {
     val curencyCompViewModel = CurrenciesCompViewModel()
-    val currencyList = curencyCompViewModel.currencyList.get()
+
     /**
      *The testing method getCurrencyList() return true test if variable from class CurrencyChartViewModel is null
      * We should test it because code in init function (class->CurrencyChartViewModel) will start, when currencyList
@@ -19,7 +19,7 @@ class CurrencyChartViewModelTest {
      **/
     @Test
     fun getCurrencyList() {
-        assertNull(currencyList)
+        assertNull(curencyCompViewModel.currencyList.get())
     }
     /***
      * testApi() is the method for testing request from api.nbp.pl
