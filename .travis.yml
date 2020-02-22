@@ -26,7 +26,6 @@ deploy:
   on:
     branch:
     - develop
-    condition: ${APK_BUILT} = 1
 jobs:
   fast_finish: true
   include:
@@ -40,7 +39,7 @@ jobs:
     script:
     - "./gradlew assembleDebug"
     - "./prepare_apk_name.sh"
-    - "export APK_BUILT=1"
+    - "sleep 20"
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
