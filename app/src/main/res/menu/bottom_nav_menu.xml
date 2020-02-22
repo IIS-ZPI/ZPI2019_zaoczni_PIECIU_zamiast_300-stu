@@ -7,8 +7,12 @@
         android:title="Waluta" />
 
     <item
-        android:id="@+id/navigation_currency_chart"
+        android:id="@+id/navigation_currency_comp"
         android:icon="@drawable/scales"
         android:title="Porównanie" />
 
+    <item
+        android:id="@+id/navigation_currency_chart"
+        android:icon="@drawable/chart"
+        android:title="Wykres"/>
 </menu>

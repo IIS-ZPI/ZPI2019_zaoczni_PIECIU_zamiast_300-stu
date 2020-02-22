@@ -1,4 +1,4 @@
-package pl.arsonproject.nbp_currency.ui.currecnyChart
+package pl.arsonproject.nbp_currency.ui.currenciesComp
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,33 +10,33 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import pl.arsonproject.nbp_currency.R
-import pl.arsonproject.nbp_currency.databinding.FragmentCurrencyChartBinding
+import pl.arsonproject.nbp_currency.databinding.FragmentCurrenciesCompBinding
 
-class CurrencyChartFragment : Fragment() {
+class CurrenciesCompFragment : Fragment() {
 
-    private lateinit var currencyChartViewModel: CurrencyChartViewModel
+    private lateinit var currenciesCompViewModel: CurrenciesCompViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        currencyChartViewModel =
-            ViewModelProviders.of(this).get(CurrencyChartViewModel::class.java)
-        val binding = DataBindingUtil.inflate<FragmentCurrencyChartBinding>(
+        currenciesCompViewModel =
+            ViewModelProviders.of(this).get(CurrenciesCompViewModel::class.java)
+        val binding = DataBindingUtil.inflate<FragmentCurrenciesCompBinding>(
             inflater,
-            R.layout.fragment_currency_chart,
+            R.layout.fragment_currencies_comp,
             container,
             false
         )
 
-        binding.vm = currencyChartViewModel
+        binding.vm = currenciesCompViewModel
         setUI()
         return binding.root
     }
 
     private fun setUI() {
-        currencyChartViewModel.errorMessage.observe(this, Observer {
+        currenciesCompViewModel.errorMessage.observe(this, Observer {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         })
     }

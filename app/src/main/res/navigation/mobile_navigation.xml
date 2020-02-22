@@ -12,8 +12,14 @@
         tools:layout="@layout/fragment_currency_info" />
 
     <fragment
-        android:id="@+id/navigation_currency_chart"
-        android:name="pl.arsonproject.nbp_currency.ui.currecnyChart.CurrencyChartFragment"
+        android:id="@+id/navigation_currency_comp"
+        android:name="pl.arsonproject.nbp_currency.ui.currenciesComp.CurrenciesCompFragment"
         android:label="Porównanie"
+        tools:layout="@layout/fragment_currencies_comp" />
+
+    <fragment
+        android:id="@+id/navigation_currency_chart"
+        android:name="pl.arsonproject.nbp_currency.ui.currenciesChart.CurrencyChartFragment"
+        android:label="Wykres"
         tools:layout="@layout/fragment_currency_chart" />
 </navigation>

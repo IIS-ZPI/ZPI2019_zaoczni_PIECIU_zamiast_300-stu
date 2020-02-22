@@ -1,28 +1,32 @@
 language: android
 dist: trusty
+os: linux
 jdk: oraclejdk8
-env:
-  global:
-  - secure: "Vo/vKQEXnh/WPMkGZq5GKFhxXbxgQjGDdXpjxOo5jOVWtqx0VZxafzNU+aLilqWh/l9JzdgUbPS+HAhQwZnnvezKSY6WbbJeB7Q8EuIStHcGIgZUgu/6uuAHn0zIuJlD2c1v0df+DCcE25w/kNHofxztD1MmwRhYrdNMr9LrSd1+jc7/fW18c41IZFOsOyAgivFIenGdBrJbqHF/l+VxkmAjh31DesmK/096kzguytyaI+jHOXsoV3R3yTLJWcsnCH/0oNk3GNnmXFK754ps2OISlol8QkXbRLSmsfEFutflDkSB33gccyqJb5mhox45zVFfqFo23OC0NtfdVrN6TGJ3PaB9cn+0+f6lgQtlGOzCJPs4+x9IQmaKEHxwTGA2VijkJfxV7jAddBHJOntGPFWZiFTSi/iK/3OmdHR+nfb5CxOQAY+hFdxsYIgHBP4odmLqSz3aKxFc+mgwQ+KXgnnfZbKI7tHGD4XmkVmyIn20/f093WFEC2NPNPc+j6NPmsogycmIBhhRz6FRopWSQvOE6969O4gtOBwWV063F3kfxDB+KfEPe0I71D4swD2HPu6OQ5UZuxNCbF2FadVw1SQjLG4/4WnTrr6iGzHkbplNHFl2UUE4QgWBhHscU45qnzfOMLYCKK0Hd4D6V3lTMTpko18czqVJGnc/7mTS5s0="
 android:
   components:
   - build-tools-29.0.2
   - android-29
   - extra
+branches:
+  only:
+    develop
 before_deploy:
-  - git config --global user.email "builds@travis-ci.com"
-  - git config --global user.name "Travis CI"
-  - export GIT_TAG=1.3.$TRAVIS_BUILD_NUMBER
-  - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-  - git push -q https://$TAGPERM@github.com/IIS-ZPI/ZPI2019_zaoczni_PIECIU_zamiast_300-stu --tags
+- git config --global user.email "builds@travis-ci.com"
+- git config --global user.name "Travis CI"
+- export GIT_TAG=1.4.$TRAVIS_BUILD_NUMBER
+- git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
 deploy:
   provider: releases
-  user: jnehlt
-  password:
-    secure: RleNFTgsBpmt5GrcqW3PtfAoEhqvjIdlxz1QaiH7F/+IcN4MDC8jYUfaL5FSMkc0I7GKysV0H4ja217CPElqAaKuQfTocWMCdYkUh4nbwL+TbKeVYBmFKkyVMKYcDaTf0OoW0C1EGUWQqphdj8TtUScFwq1N3mVPxAQOi45uF5H6rvnKmsawOat/4XvUvalfB+Q/H9UWemvyApfPfJyw8wddkE5VATW3Qku8/yoi5aQVnYnqouMnB2TVwIQBufU28YQQ703FVDEkkR9Vp4RNby6uUb8p8o5UJfZt/wdpx5ovunCiW4UQBjoy6QjS/6X4wV5qPuH+LZy4Ox3N3jZyUCfkq8UOk26DFMaK4SIhi5Rfqc+GOyXzJYEwNiXhyteCTYdla90kAGbc5xBRr/GVGnHqeOcsUeJbwa/b7pvUxWCUh4Sb7d1Kcdf022lwwppILe0r2RyXD55AnbmnQNU8Nv0fN/ImErjGZPEev+/dRFv2FQc2vMyheGWoSv4y+azN6dIRmwb2VUGcT8t+uG7hjRVkPEznXVc+CjFrPIoedguLwB0EXjK0cB4TwULaklwo7zX5EQNxPzVn8A7yUdrfhSLpl9EuWiSKADcjoUhVeYDaaMTGHM7vOAYspdjHTJaAgF6IqT3YakqquW5A6XOmaLduUbg+nnEM6apwIDpWXms=
+  token:
+    secure: vdEZjvanVyrCQjYDq/bfdzOBLqdqVbsZPsnSBXDzLI6XjEReYeFeT+0DjYQPwR4QWsgkQBIxm9LEwQmteWtS2EkcmuZ7ymlqXGeHmCuz+KLKqTQ+5G5S7SLroNCc8UG1Hs0hw113894vgacS0siL8PKkzmt4bIRN7/eE8tGVrlPu07CCVwJtnVRpnR6iXz1yIy4ZPclraI1SksS0J8Sb1JGWqpoD675a1+/NUk8SZHUOxPgfveULU3tGsI7s1fbH3b4R2rvzIch/Ydvm13adAnU1LVnBJRzZnF38kFltzRyWFGXk1B651k/XBHBaLLujhMmX3BOhwaiw9yzPNw32sXd7adTlXRiQYueDt0JOkWWPHSeriYMDgXDjAHl+v74FatU+D4x+N6mkMmFLGU+++ynoxEuKuQT1RiS7jt7J5STfCL2EcVFjmq/9u3Rzr1KRjIBfU8PMa3pQwifSialgkcUvrh2+HY0HAPmipQn1OhtyqIGfV30oc7zZMBIsmyzX6g21KRLDgN/3bCSNAyMsKae0RLR4HaJOsdEs8PFQDCZRfKdV7CTYtdgQkYhFDkifWe+HShqfXvUS+dPdcdZJAhXqsJ2zqWoGtqjbec2Vp82kUBCk6f806eOO0bZ0ENjU3QqokKIJitGc/uoqv3X3sMFQjXJVjGhmeCo/YE/8V0c=
+  name: CurrencyApp v1.4.$TRAVIS_BUILD_NUMBER
+  file_glob: true
   file: "./*.apk"
   skip_cleanup: true
-matrix:
+  on:
+    branch:
+    - develop
+jobs:
   fast_finish: true
   include:
   - name: Compile Release Sources
@@ -34,7 +38,7 @@ matrix:
   - name: Build a DebugAPK
     script:
     - "./gradlew assembleDebug"
-    - ./prepare_apk_name.sh
+    - "./prepare_apk_name.sh"
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
