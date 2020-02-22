@@ -6,12 +6,12 @@ import okhttp3.*
 import org.junit.Test
 
 import org.junit.Assert.*
-import pl.arsonproject.nbp_currency.ui.currecnyChart.CurrencyChartViewModel
+import pl.arsonproject.nbp_currency.ui.currenciesComp.CurrenciesCompViewModel
 
 
-
-
-class CurrencyChartViewModelTest: CurrencyChartViewModel() {
+class CurrencyChartViewModelTest {
+    val curencyCompViewModel = CurrenciesCompViewModel()
+    val currencyList = curencyCompViewModel.currencyList.get()
     /**
      *The testing method getCurrencyList() return true test if variable from class CurrencyChartViewModel is null
      * We should test it because code in init function (class->CurrencyChartViewModel) will start, when currencyList
@@ -19,7 +19,7 @@ class CurrencyChartViewModelTest: CurrencyChartViewModel() {
      **/
     @Test
     fun getCurrencyList() {
-        assertNull(currencyList.get())
+        assertNull(currencyList)
     }
     /***
      * testApi() is the method for testing request from api.nbp.pl
